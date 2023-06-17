@@ -4,6 +4,11 @@ import { connectToDB } from "@utils/database";
 export const POST = async (req) => {
   const { userId, prompt, tag } = await req.json();
 
+  if (!userid)
+    return new Response("Invalid User, Please relog-in", {
+      status: 500,
+    });
+
   try {
     await connectToDB();
     const newPrompt = new Prompt({
