@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@app/profile/loading";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,6 +15,19 @@ const CreatePrompt = () => {
     prompt: "",
     tag: "",
   });
+
+  const { status } = useSession();
+
+  // useEffect(() => {
+  //   if (status === "unauthenticated") router.push("/");
+  // }, [status]);
+
+  if (status === "loading") {
+    // Loading state while session is being checked
+    return <Loading />;
+  }
+
+  if (status === "unauthenticated") return <h2>Please login first</h2>;
 
   const createPrompt = async (e) => {
     e.preventDefault();
