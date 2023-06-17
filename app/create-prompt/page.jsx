@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -29,8 +29,13 @@ const CreatePrompt = () => {
         }),
       });
 
-      if (response.ok) {
+      if (response.status === 401) {
         router.push("/");
+        signOut();
+      }
+
+      if (response.ok) {
+        router.push("/profile");
       }
     } catch (error) {
       console.log(error.message);

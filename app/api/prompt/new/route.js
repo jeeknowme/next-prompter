@@ -1,12 +1,15 @@
 import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
+import { getSession } from "next-auth/client";
 
-export const POST = async (req) => {
+export const POST = async (req, res) => {
   const { userId, prompt, tag } = await req.json();
 
-  if (!userId)
-    return new Response("Invalid User, Please relog-in", {
-      status: 500,
+  const session = await getSession({ req });
+
+  if (!session)
+    return new Response("User not authenticated, please relog-in", {
+      status: 401,
     });
 
   try {

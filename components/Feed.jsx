@@ -18,15 +18,38 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [searchText, setSearchText] = useState("");
-  const handleSearchChange = (e) => {};
+
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+
+    // setFilteredPosts(
+    //   posts.map((post) => {
+    //     return (
+    //       post.prompt.includes(searchText) ||
+    //       post.tag.includes(searchText) ||
+    //       post.creator.username.includes(searchText)
+    //     );
+    //   })
+    // );
+  };
   const [posts, setPosts] = useState([]);
 
+  const filteredPosts = () => {
+    const filtered = posts.filter((post) => {
+      return (
+        post.prompt.includes(searchText) ||
+        post.tag.includes(searchText) ||
+        post.creator.username.includes(searchText)
+      );
+    });
+
+    return filtered;
+  };
+
   useEffect(() => {
-    console.log("hey");
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
       const data = await response.json();
-      console.log(data);
 
       setPosts(data);
     };
@@ -39,7 +62,7 @@ const Feed = () => {
       <form className="relative w-full flex-center">
         <input
           type="text"
-          placeholder="Search for a tag or a username"
+          placeholder="Search for a tag, prompt or a username"
           value={searchText}
           onChange={handleSearchChange}
           required
@@ -47,7 +70,7 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCardList data={posts} handleTagClick={() => {}} />
+      <PromptCardList data={filteredPosts()} handleTagClick={() => {}} />
     </section>
   );
 };
