@@ -46,6 +46,10 @@ const Feed = () => {
     return filtered;
   };
 
+  const handleTagClick = (tag) => {
+    setSearchText(tag);
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch("/api/prompt");
@@ -61,7 +65,7 @@ const Feed = () => {
     <section className="feed">
       <form className="relative w-full flex-center">
         <input
-          type="text"
+          type="search"
           placeholder="Search for a tag, prompt or a username"
           value={searchText}
           onChange={handleSearchChange}
@@ -70,7 +74,7 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCardList data={filteredPosts()} handleTagClick={() => {}} />
+      <PromptCardList data={filteredPosts()} handleTagClick={handleTagClick} />
     </section>
   );
 };
