@@ -1,24 +1,23 @@
 import Loading from "@app/profile/loading";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import PromptCard from "./PromptCard";
 
 const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
   const { status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === "unauthenticated") router.push("/");
-  }, [status]);
+  // useEffect(() => {
+  //   if (status === "unauthenticated") router.push("/");
+  // }, [status]);
 
   if (status === "loading") {
     // Loading state while session is being checked
     return <Loading />;
   }
 
-  // if(status === 'unauthenticated')
-  // router.push("/");
+  if (status === "unauthenticated" && data.length === 0)
+    return <h2>Please login first</h2>;
 
   return (
     <section className="w-full">
@@ -40,22 +39,5 @@ const Profile = ({ name, desc, data, handleEdit, handleDelete }) => {
     </section>
   );
 };
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {}, // No additional props needed
-  };
-}
 
 export default Profile;
