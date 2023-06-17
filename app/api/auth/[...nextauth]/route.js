@@ -19,6 +19,14 @@ const handler = NextAuth({
 
       return session;
     },
+
+    async signOut({ redirect }) {
+      // Perform any sign-out logic, such as clearing session or tokens
+      // ...
+
+      // Redirect the user to the home page after sign out
+      await redirect("/");
+    },
     async signIn({ account, profile, user, credentials }) {
       try {
         await connectToDB();
