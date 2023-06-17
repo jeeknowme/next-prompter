@@ -4,10 +4,11 @@ import { getSession } from "next-auth/react";
 
 export const POST = async (req, res) => {
   const { userId, prompt, tag } = await req.json();
-
   const session = await getSession({ req });
 
-  if (!session)
+  console.log(session);
+
+  if (session === undefined)
     return new Response("User not authenticated, please relog-in", {
       status: 401,
     });
